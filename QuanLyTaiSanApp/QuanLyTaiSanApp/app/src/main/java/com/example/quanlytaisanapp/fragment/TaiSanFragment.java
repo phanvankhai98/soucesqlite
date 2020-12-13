@@ -33,6 +33,7 @@ public class TaiSanFragment extends Fragment {
     DatabaseHandler db;
     FrameLayout frameLayout;
     List<TaiSan> taiSanList = new ArrayList<>();
+    List<Phong> listPhong = new ArrayList<>();
     ListView listView;
     FloatingActionButton floatButton;
     ListTaiSanAdapter listAdapter;
@@ -77,6 +78,7 @@ public class TaiSanFragment extends Fragment {
         taiSanList = db.getAllTaiSan();
         frameLayout = view.findViewById(R.id.empty);
         floatButton = view.findViewById(R.id.float_button);
+        listPhong = db.getAllPhong();
         spPhong = view.findViewById(R.id.spinner_phong);
         spTaiSan = view.findViewById(R.id.spinner_taisan);
         item = getResources().getStringArray(R.array.taiSanType);
@@ -95,13 +97,14 @@ public class TaiSanFragment extends Fragment {
         });
     }
     public void goToDetail(int id) {
-        Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
+        Intent intent = new Intent(getActivity(), ChiTietTaiSanActivity.class);
         intent.putExtra("tai_san_id", id + "");
         startActivityForResult(intent, 4);
     }
     public void setDataSpinnerPhong() {
-        final List<Phong> listPhong = db.getAllPhong();
+        listPhong = db.getAllPhong();
         List<String> listnamePhong = new ArrayList<>();
+        listnamePhong.add("Tất cả");
         for (Phong phong : listPhong) {
             listnamePhong.add(phong.getTen());
         }
@@ -111,8 +114,15 @@ public class TaiSanFragment extends Fragment {
         this.spPhong.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Phong phong = (Phong) listPhong.get(position);
-                listAdapter.updateReceiptsList(db.getTaiSanTrongPhong(phong.getMa()));
+                if (position == 0) {
+                    listAdapter.updateReceiptsList(db.getAllTaiSan());
+                } else {
+                    Phong phong = listPhong.get(position - 1);
+                    listAdapter.updateReceiptsList(db.getTaiSanTrongPhong(phong.getMa()));
+                }
+                if(listAdapter.getCount()<=0){
+                    frameLayout.setVisibility(View.VISIBLE);
+                }else frameLayout.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -133,11 +143,16 @@ public class TaiSanFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String name = item[position];
                 if (name.equals("Lớn hơn 10 triệu")) {
-                    listAdapter.updateReceiptsList(db.getTaiSanHon10Cu());
+                    listAdapter.updateReceiptsList(db.getTaiSanHon10Cu(listPhong.get(spPhong.getSelectedItemPosition() > 0 ?
+                            spPhong.getSelectedItemPosition()- 1 : 0).getMa()));
                 } else {
                     //get all
                     listAdapter.updateReceiptsList(db.getAllTaiSan());
                 }
+                if(listAdapter.getCount()<=0){
+                    frameLayout.setVisibility(View.VISIBLE);
+                }else frameLayout.setVisibility(View.INVISIBLE);
+
             }
 
             @Override
@@ -149,8 +164,12 @@ public class TaiSanFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 3||requestCode == 4) {
-            listAdapter.updateReceiptsList(db.getAllTaiSan());
+        if (requestCode == 3 || requestCode == 4) {
+            List<TaiSan> list = db.getAllTaiSan();
+            listAdapter.updateReceiptsList(list);
+            if(list.isEmpty()){
+                frameLayout.setVisibility(View.VISIBLE);
+            }else frameLayout.setVisibility(View.INVISIBLE);
         }
     }
 }

@@ -26,7 +26,7 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
     String typeEdit, taiSanID;
     TaiSan taiSan;
     private TextInputEditText edtTenTaiSan, edtGiaTri, edtLoaiTaiSan, edtMaTaiSan;
-    private TextInputLayout tilTenTaiSan, tilGiaTri, tilLoaiTaiSan,tilMaTaiSan;
+    private TextInputLayout tilTenTaiSan, tilGiaTri, tilLoaiTaiSan, tilMaTaiSan;
     private String tenTaiSan, loaiTaiSan, giaTri;
     private Button btnSubmit;
 
@@ -45,7 +45,7 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    addTaiSan();
+                addTaiSan();
             }
         });
     }
@@ -58,7 +58,14 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
         }
         setSpinner(tenPhong);
         if (taiSanID != null) {
-            spinner.setSelection(taiSan.getViTri());
+            int viTriSpnnerPhong = 0;
+            for (Phong i : phongList) {
+                if (i.getMa() == taiSan.getViTri()) {
+                    viTriSpnnerPhong = phongList.indexOf(i);
+                    break;
+                }
+            }
+            spinner.setSelection(viTriSpnnerPhong+1);
         }
     }
 
@@ -84,7 +91,7 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
             tilMaTaiSan.setVisibility(View.VISIBLE);
             taiSan = db.getTaiSanById(taiSanID);
             edtMaTaiSan.setEnabled(false);
-            edtMaTaiSan.setText(taiSan.getMa()+"");
+            edtMaTaiSan.setText(taiSan.getMa() + "");
             edtTenTaiSan.setText(taiSan.getTen());
             edtLoaiTaiSan.setText(taiSan.getLoai());
             edtGiaTri.setText(taiSan.getGiaTri() + "");
@@ -130,15 +137,14 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
                     tenTaiSan,
                     loaiTaiSan,
                     spinner.getSelectedItemPosition() != 0 ?
-                            phongList.get(spinner.getSelectedItemPosition()-1).getMa() : 0,
+                            phongList.get(spinner.getSelectedItemPosition() - 1).getMa() : 0,
                     Double.parseDouble(giaTri));
             DatabaseHandler databaseHelper = new DatabaseHandler(getBaseContext());
-            if (taiSanID!=null) {
+            if (taiSanID != null) {
                 mTaiSan.setMa(taiSan.getMa());
                 databaseHelper.updateTaiSan(mTaiSan);
                 Toast.makeText(getBaseContext(), "Sửa tài sản thành công", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 databaseHelper.addTaiSan(mTaiSan);
                 Toast.makeText(getBaseContext(), "Thêm tài sản thành công", Toast.LENGTH_SHORT).show();
             }
