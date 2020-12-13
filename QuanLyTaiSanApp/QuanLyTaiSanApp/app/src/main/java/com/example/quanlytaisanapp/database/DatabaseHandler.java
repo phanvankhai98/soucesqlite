@@ -177,21 +177,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM  " + TABLE_TAI_SAN + " WHERE "
                 + TAI_SAN_VI_TRI + " = " + idPhong;
-        List<TaiSan> data = new ArrayList<>();
+
         Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            TaiSan taiSan = new TaiSan(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getInt(3),
-                    cursor.getDouble(4)
-            );
-            data.add(taiSan);
-            cursor.moveToNext();
-        }
-        return data;
+        return getListTaiSan(cursor);
+    }
+
+    public List<TaiSan> getTaiSanHon10Cu() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM  " + TABLE_TAI_SAN + " WHERE "
+                + TAI_SAN_GIA_TRI + " >= " + 10000000;
+        Cursor cursor = db.rawQuery(query, null);
+        return getListTaiSan(cursor);
     }
 
 
