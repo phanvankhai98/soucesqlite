@@ -20,15 +20,20 @@ public class ChiTietPhongActivity extends AppCompatActivity {
     private TextInputEditText edtRoomName, edtRoomId, edtRoomDes;
     private TextInputLayout tilRoomName, tilRoomId, tilRoomDes;
     String type = "";
-    private String roomId, roomName, roomDes;
+    int roomId;
+    private String roomName, roomDes;
     private Button btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_phong);
-        type = getIntent().getStringExtra("type_room");
+        roomId = getRoomId();
         init();
+
+        getSupportActionBar().setTitle("Chi tiết Phòng");
+        btnSubmit.setText("Cập nhật phòng");
+        edtRoomId.setText(roomId);
     }
 
     private void init() {
@@ -46,28 +51,22 @@ public class ChiTietPhongActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addRoom();
+                editRoom();
             }
         });
     }
 
-    public int getBookId() {
+    public int getRoomId() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         int id = bundle.getInt("roomId");
         return id;
     }
+
     private void setToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        if (type.equals("1")) {
-            getSupportActionBar().setTitle("Thêm Phòng");
-            btnSubmit.setText("Thêm phòng");
-        } else {
-            getSupportActionBar().setTitle("Chi tiết Phòng");
-            btnSubmit.setText("Cập nhật phòng");
-        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +75,7 @@ public class ChiTietPhongActivity extends AppCompatActivity {
         });
     }
 
-    public void addRoom() {
+    public void editRoom() {
         getDataInput();
         setDefaultError();
         boolean cancel = false;
@@ -103,7 +102,6 @@ public class ChiTietPhongActivity extends AppCompatActivity {
     }
 
     public void getDataInput() {
-        roomId = edtRoomId.getText().toString().trim();
         roomName = edtRoomName.getText().toString().trim();
         roomDes = edtRoomDes.getText().toString().trim();
     }

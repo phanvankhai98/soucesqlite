@@ -1,11 +1,23 @@
 package com.example.quanlytaisanapp.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Phong implements Serializable {
     private int ma;
     private String ten;
     private String moTa;
+    private List<TaiSan> list;
+
+    public Phong() {
+    }
+
+    public Phong(int ma, String ten, String moTa, List<TaiSan> list) {
+        this.ma = ma;
+        this.ten = ten;
+        this.moTa = moTa;
+        this.list = list;
+    }
 
     public Phong(int ma, String ten, String moTa) {
         this.ma = ma;
@@ -16,9 +28,6 @@ public class Phong implements Serializable {
     public Phong(String ten, String moTa) {
         this.ten = ten;
         this.moTa = moTa;
-    }
-
-    public Phong() {
     }
 
     public int getMa() {
@@ -43,5 +52,13 @@ public class Phong implements Serializable {
 
     public void setMoTa(String moTa) {
         this.moTa = moTa;
+    }
+
+    public List<TaiSan> getList() {
+        return list;
+    }
+
+    public void setList(List<TaiSan> list) {
+        this.list = list;
     }
 }

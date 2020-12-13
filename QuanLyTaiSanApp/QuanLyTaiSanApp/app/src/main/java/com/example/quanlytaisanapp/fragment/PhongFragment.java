@@ -83,7 +83,6 @@ public class PhongFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
-                intent.putExtra("type_room", "1");
                 startActivityForResult(intent, 1);
             }
         });

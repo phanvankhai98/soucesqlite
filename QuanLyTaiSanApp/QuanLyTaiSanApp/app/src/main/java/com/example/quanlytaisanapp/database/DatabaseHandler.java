@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
 import com.example.quanlytaisanapp.model.Phong;
 import com.example.quanlytaisanapp.model.TaiSan;
 
@@ -53,7 +54,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         "\t\"%s\"\tTEXT,\n" +
                         "\t\"%s\"\tINTEGER,\n" +
                         "\t\"%s\"\tREAL,\n" +
-                        "\tPRIMARY KEY(\"%s\" AUTOINCREMENT )\n" +
+                        "\tPRIMARY KEY(\"%s\" AUTOINCREMENT )" +
+                        " FOREIGN KEY (" + TAI_SAN_VI_TRI + ") REFERENCES " + TABLE_PHONG + "(" + PHONG_ID + ")\n" +
                         ");",
                 TABLE_TAI_SAN,
                 TAI_SAN_ID,
@@ -184,7 +186,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return kq > 0;
     }
 
-    public boolean updateTaiSanTrongPhong(TaiSan taiSan,int idPhong) {
+    public boolean updateTaiSanTrongPhong(TaiSan taiSan, int idPhong) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
