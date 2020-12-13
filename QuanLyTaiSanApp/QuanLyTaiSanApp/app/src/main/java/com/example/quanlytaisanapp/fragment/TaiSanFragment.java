@@ -136,7 +136,7 @@ public class TaiSanFragment extends Fragment {
                     listAdapter.updateReceiptsList(db.getTaiSanHon10Cu());
                 } else {
                     //get all
-                    System.out.println("name: " + name);
+                    listAdapter.updateReceiptsList(db.getAllTaiSan());
                 }
             }
 
