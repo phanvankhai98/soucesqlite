@@ -132,7 +132,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(TAI_SAN_ID, taiSan.getMa());
         values.put(TAI_SAN_TEN, taiSan.getTen());
         values.put(TAI_SAN_LOAI, taiSan.getLoai());
         values.put(TAI_SAN_VI_TRI, taiSan.getViTri());
