@@ -12,18 +12,21 @@ import android.widget.TextView;
 
 import com.ptit.quanlysinhvienthuctap.R;
 import com.ptit.quanlysinhvienthuctap.database.DatabaseHandler;
+import com.ptit.quanlysinhvienthuctap.model.GiangVien;
 import com.ptit.quanlysinhvienthuctap.model.SinhVien;
 
 import java.util.List;
 
 public class SinhVienAdapter extends BaseAdapter {
     List<SinhVien> data;
+    List<GiangVien> listGV;
     Context context;
     LayoutInflater layoutInflater;
 
-    public SinhVienAdapter(List<SinhVien> data, Context context) {
+    public SinhVienAdapter(List<SinhVien> data, Context context,List<GiangVien> listGV ) {
         this.data = data;
         this.context = context;
+        this.listGV = listGV;
         layoutInflater = LayoutInflater.from(context);
     }
 

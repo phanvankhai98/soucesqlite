@@ -53,9 +53,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 STUDENT_NAME + " TEXT, " +
                 STUDENT_BOD + " TEXT, " +
                 STUDENT_ADDRESS + " TEXT, " +
-                STUDENT_TEACHER_ID + "INTEGER, " +
-                " FOREIGN KEY ( " + STUDENT_TEACHER_ID + ") REFERENCES " + TEACHER_TABLE_NAME + " ( " + TEACHER_ID + " ) ON DELETE CASCADE, " +
-                " ) ";
+                STUDENT_TEACHER_ID + " INTEGER, " +
+                " FOREIGN KEY ( " + STUDENT_TEACHER_ID + ") REFERENCES " +
+                TEACHER_TABLE_NAME + " ( " + TEACHER_ID + " )" +
+                " ON DELETE CASCADE" +
+                ");" ;
         db.execSQL(createTableStudent);
 
         //create table book
@@ -70,12 +72,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 TEACHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TEACHER_NAME + " TEXT, " +
                 TEACHER_BOD + " TEXT, " +
-                TEACHER_BOD + " TEXT, " +
                 TEACHER_EXP + " INTEGER " +
-
                 ")";
         db.execSQL(createTableTeacher);
-        Toast.makeText(context, "Create Database successfully", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -159,6 +158,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return kq > 0;
     }
 
+    public List<SinhVien> getSinhVienCuaGV(int idGV) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM  " + STUDENT_TABLE_NAME + " WHERE "
+                + STUDENT_TEACHER_ID + " = " + idGV;
+
+        Cursor cursor = db.rawQuery(query, null);
+        List<SinhVien> data = getListSinhVien(cursor);
+        db.close();
+        return data;
+    }
+
+    public List<SinhVien> getListSinhVien(Cursor cursor) {
+        List<SinhVien> data = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            SinhVien sinhVien = new SinhVien(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3)
+            );
+            data.add(sinhVien);
+            cursor.moveToNext();
+        }
+        return data;
+    }
     //Giang Vien ----------------------------------
     public void addGiangVien(GiangVien giangVien) {
         SQLiteDatabase db = this.getWritableDatabase();
