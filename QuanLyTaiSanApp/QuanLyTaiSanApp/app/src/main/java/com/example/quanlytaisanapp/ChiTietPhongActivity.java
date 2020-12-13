@@ -1,6 +1,5 @@
 package com.example.quanlytaisanapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,8 +18,9 @@ public class ChiTietPhongActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextInputEditText edtRoomName, edtRoomId, edtRoomDes;
     private TextInputLayout tilRoomName, tilRoomId, tilRoomDes;
+    DatabaseHandler databaseHelper;
     String type = "";
-    int roomId;
+    String roomId;
     private String roomName, roomDes;
     private Button btnSubmit;
 
@@ -28,12 +28,17 @@ public class ChiTietPhongActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_phong);
-        roomId = getRoomId();
+        roomId = getIntent().getStringExtra("roomId");
         init();
+        setDataPhong(roomId);
+    }
 
-        getSupportActionBar().setTitle("Chi tiết Phòng");
-        btnSubmit.setText("Cập nhật phòng");
-        edtRoomId.setText(roomId);
+    private void setDataPhong(String roomId) {
+        Phong phong = databaseHelper.getPhongById(roomId);
+        edtRoomId.setText(phong.getMa() + "");
+        edtRoomName.setText(phong.getTen());
+        edtRoomDes.setText(phong.getMoTa());
+
     }
 
     private void init() {
@@ -48,19 +53,13 @@ public class ChiTietPhongActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         btnSubmit = findViewById(R.id.btn_submit);
         setToolbar();
+        databaseHelper = new DatabaseHandler(getBaseContext());
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 editRoom();
             }
         });
-    }
-
-    public int getRoomId() {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        int id = bundle.getInt("roomId");
-        return id;
     }
 
     private void setToolbar() {
@@ -93,11 +92,13 @@ public class ChiTietPhongActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            Phong phong = new Phong(roomName, roomDes);
-            DatabaseHandler databaseHelper = new DatabaseHandler(getBaseContext());
-            databaseHelper.addPhong(phong);
-            Toast.makeText(getBaseContext(), "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
-            finish();
+            int id = Integer.parseInt(roomId);
+            Phong phong = new Phong(id, roomName, roomDes);
+            Boolean kq = databaseHelper.updatePhong(phong);
+            if (kq) {
+                Toast.makeText(getBaseContext(), "Cập nhật dữ liệu thành công", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 

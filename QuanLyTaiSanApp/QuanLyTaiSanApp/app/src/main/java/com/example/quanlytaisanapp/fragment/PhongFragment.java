@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.quanlytaisanapp.ChiTietPhongActivity;
 import com.example.quanlytaisanapp.R;
+import com.example.quanlytaisanapp.ThemPhongActivity;
 import com.example.quanlytaisanapp.adapter.ListPhongAdapter;
 import com.example.quanlytaisanapp.database.DatabaseHandler;
 import com.example.quanlytaisanapp.model.Phong;
@@ -66,7 +67,7 @@ public class PhongFragment extends Fragment {
 
     public void goToDetail(int id) {
         Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
-        intent.putExtra("roomId", id);
+        intent.putExtra("roomId", id + "");
         startActivityForResult(intent, 2);
     }
 
@@ -82,7 +83,7 @@ public class PhongFragment extends Fragment {
         floatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
+                Intent intent = new Intent(getActivity(), ThemPhongActivity.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -92,6 +93,11 @@ public class PhongFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
+            phongList.clear();
+            phongList = db.getAllPhong();
+            listAdapter = new ListPhongAdapter(phongList, getContext());
+            listView.setAdapter(listAdapter);
+        } else if (requestCode == 2) {
             phongList.clear();
             phongList = db.getAllPhong();
             listAdapter = new ListPhongAdapter(phongList, getContext());
