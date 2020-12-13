@@ -22,30 +22,14 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_tai_san_id"
+            android:id="@+id/til_ten_tai_san"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_tai_san_id"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Mã tài sản"
-                android:inputType="text"
-                app:errorEnabled="true" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_name_room"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_name_room"
+                android:id="@+id/edt_ten_tai_san"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Tên tài sản"
@@ -68,26 +52,33 @@
                 app:errorEnabled="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_position"
+
+        <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_position"
+            >
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="2dp"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Vị trí"
+                android:textSize="18sp"
+                />
+            <Spinner
+                android:layout_marginTop="10dp"
+                android:id="@+id/spinner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Vị trí"
-                android:inputType="text"
-                app:errorEnabled="true" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="50dp"
+                />
+        </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_gia_tri"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edt_gia_tri"
                 android:layout_width="match_parent"

@@ -19,10 +19,11 @@ import java.util.List;
 
 public class ListTaiSanAdapter extends BaseAdapter {
     List<TaiSan> data;
+    List<Phong> listPhong;
     Context context;
     LayoutInflater layoutInflater;
 
-    public ListTaiSanAdapter(List<TaiSan> data, Context context) {
+    public ListTaiSanAdapter(List<TaiSan> data, Context context, List<Phong> listPhong) {
         this.data = data;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
@@ -47,52 +48,61 @@ public class ListTaiSanAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.item_phong, null);
+            convertView = layoutInflater.inflate(R.layout.item_tai_san, null);
             holder = new ViewHolder();
-            holder.txtName = convertView.findViewById(R.id.tv_room);
+            holder.txtTenTaiSan = convertView.findViewById(R.id.tv_ten);
+            holder.txtGia = convertView.findViewById(R.id.tv_gia);
+            holder.txtPhong = convertView.findViewById(R.id.tv_phong);
             holder.imgDelete = convertView.findViewById(R.id.img_delete);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-//        final Phong phong = data.get(position);
+        final TaiSan taiSan = data.get(position);
 //
-//        holder.txtName.setText(phong.getTen());
-//        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-//                builder1.setTitle("Xác nhận xóa");
-//                builder1.setMessage("bạn có muốn xóa " + phong.getTen() + " ?");
-//                builder1.setCancelable(true);
-//
-//                builder1.setNegativeButton(
-//                        "Yes",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                DatabaseHandler databaseHelper = new DatabaseHandler(context);
-//                                databaseHelper.deletePhong(phong.getMa());
-//                                notifyDataSetChanged();
-//                            }
-//                        });
-//                builder1.setPositiveButton(
-//                        "No",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//                AlertDialog alert11 = builder1.create();
-//                alert11.show();
-//            }
-//        });
+        holder.txtTenTaiSan.setText(taiSan.getTen());
+        holder.txtGia.setText(taiSan.getGiaTri()+"đ");
+//        holder.txtPhong.setText("Phòng "+listPhong.get(taiSan.getViTri()).getTen());
+        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                builder1.setTitle("Xác nhận xóa");
+                builder1.setMessage("bạn có muốn xóa " + taiSan.getTen() + " ?");
+                builder1.setCancelable(true);
+
+                builder1.setNegativeButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                DatabaseHandler databaseHelper = new DatabaseHandler(context);
+                                databaseHelper.deleteTaiSan(taiSan.getMa());
+                                notifyDataSetChanged();
+                            }
+                        });
+                builder1.setPositiveButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+        });
 
         return convertView;
     }
 
     public static class ViewHolder {
-        TextView txtName;
+        TextView txtTenTaiSan,txtGia,txtPhong;
         ImageView imgDelete;
+    }
+    public void updateReceiptsList(List<TaiSan> newlist) {
+        data.clear();
+        data.addAll(newlist);
+        this.notifyDataSetChanged();
     }
 }

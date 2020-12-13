@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.quanlytaisanapp.R;
 import com.example.quanlytaisanapp.database.DatabaseHandler;
 import com.example.quanlytaisanapp.model.Phong;
+import com.example.quanlytaisanapp.model.TaiSan;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ListPhongAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.item_phong, null);
@@ -71,7 +72,9 @@ public class ListPhongAdapter extends BaseAdapter {
                             public void onClick(DialogInterface dialog, int id) {
                                 DatabaseHandler databaseHelper = new DatabaseHandler(context);
                                 databaseHelper.deletePhong(phong.getMa());
-                                notifyDataSetChanged();
+                                data.remove(phong);
+                                List<Phong> tmp =data;
+                                updateReceiptsList(tmp);
                             }
                         });
                 builder1.setPositiveButton(
@@ -92,5 +95,11 @@ public class ListPhongAdapter extends BaseAdapter {
     public static class ViewHolder {
         TextView txtName;
         ImageView imgDelete;
+    }
+
+    public void updateReceiptsList(List<Phong> newlist) {
+        data.clear();
+        data.addAll(newlist);
+        this.notifyDataSetChanged();
     }
 }

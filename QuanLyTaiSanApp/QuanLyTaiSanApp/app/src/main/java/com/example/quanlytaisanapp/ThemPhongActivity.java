@@ -67,7 +67,7 @@ public class ThemPhongActivity extends AppCompatActivity {
             tilRoomName.setError("Không để trống");
             focusView = tilRoomName;
             cancel = true;
-        } else if (TextUtils.isEmpty(roomName)) {
+        } else if (TextUtils.isEmpty(roomDes)) {
             tilRoomDes.setError("Không để trống");
             focusView = tilRoomDes;
             cancel = true;

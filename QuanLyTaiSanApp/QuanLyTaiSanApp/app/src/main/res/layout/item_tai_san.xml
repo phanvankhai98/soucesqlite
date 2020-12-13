@@ -14,23 +14,34 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_room"
+            android:id="@+id/tv_ten"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:paddingTop="10dp"
             android:text="Tên tài sản"
             android:textColor="#000000"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
+            android:id="@+id/tv_gia"
             android:textColor="#000000"
             android:paddingHorizontal="10dp"
-            android:paddingBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="gia tri"
+            />
+        <TextView
+            android:id="@+id/tv_phong"
+            android:textColor="#000000"
+            android:paddingHorizontal="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phòng"
             />
     </LinearLayout>
     <ImageView

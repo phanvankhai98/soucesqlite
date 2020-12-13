@@ -11,10 +11,13 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.quanlytaisanapp.ChiTietPhongActivity;
 import com.example.quanlytaisanapp.ChiTietTaiSanActivity;
 import com.example.quanlytaisanapp.R;
+import com.example.quanlytaisanapp.adapter.ListPhongAdapter;
 import com.example.quanlytaisanapp.adapter.ListTaiSanAdapter;
 import com.example.quanlytaisanapp.database.DatabaseHandler;
 import com.example.quanlytaisanapp.model.Phong;
@@ -44,9 +47,9 @@ public class TaiSanFragment extends Fragment {
         handleView();
         handleEvent();
         //spinner phong
-//        setDataSpinnerPhong();
+        setDataSpinnerPhong();
         //spinner tai san
-//        setDataSpinnerTaiSan();
+        setDataSpinnerTaiSan();
         return view;
     }
 
@@ -62,8 +65,8 @@ public class TaiSanFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ChiTietTaiSanActivity.class);
-                intent.putExtra("type_room", "1");
-                startActivityForResult(intent, 1);
+                intent.putExtra("type_edit", "1");
+                startActivityForResult(intent, 3);
             }
         });
     }
@@ -79,19 +82,23 @@ public class TaiSanFragment extends Fragment {
         item = getResources().getStringArray(R.array.taiSanType);
         //listview
         listView = view.findViewById(R.id.listview);
-        listAdapter = new ListTaiSanAdapter(taiSanList, getContext());
+        listAdapter = new ListTaiSanAdapter(taiSanList, getContext(),db.getAllPhong());
         listView.setAdapter(listAdapter);
 
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                int roomId = taiSanList.get(i).getMa();
-////                goToDetail(roomId);
-//            }
-//        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int taiSanID = taiSanList.get(i).getMa();
+                goToDetail(taiSanID);
+            }
+        });
     }
-
+    public void goToDetail(int id) {
+        Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
+        intent.putExtra("tai_san_id", id + "");
+        startActivityForResult(intent, 4);
+    }
     public void setDataSpinnerPhong() {
         final List<Phong> listPhong = db.getAllPhong();
         List<String> listnamePhong = new ArrayList<>();
@@ -105,8 +112,7 @@ public class TaiSanFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Phong phong = (Phong) listPhong.get(position);
-                taiSanList = db.getTaiSanTrongPhong(phong.getMa());
-                listAdapter.notifyDataSetChanged();
+                listAdapter.updateReceiptsList(db.getTaiSanTrongPhong(phong.getMa()));
             }
 
             @Override
@@ -127,8 +133,7 @@ public class TaiSanFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String name = item[position];
                 if (name.equals("Lớn hơn 10 triệu")) {
-                    taiSanList = db.getTaiSanHon10Cu();
-                    listAdapter.notifyDataSetChanged();
+                    listAdapter.updateReceiptsList(db.getTaiSanHon10Cu());
                 } else {
                     //get all
                     System.out.println("name: " + name);
@@ -139,5 +144,13 @@ public class TaiSanFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 3||requestCode == 4) {
+            listAdapter.updateReceiptsList(db.getAllTaiSan());
+        }
     }
 }

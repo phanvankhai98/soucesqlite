@@ -17,6 +17,13 @@ public class TaiSan implements Serializable {
         this.giaTri = giaTri;
     }
 
+    public TaiSan(String ten, String loai, int viTri, double giaTri) {
+        this.ten = ten;
+        this.loai = loai;
+        this.viTri = viTri;
+        this.giaTri = giaTri;
+    }
+
     public TaiSan() {
     }
 
