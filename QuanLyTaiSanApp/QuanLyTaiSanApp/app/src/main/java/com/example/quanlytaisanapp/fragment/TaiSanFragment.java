@@ -33,8 +33,8 @@ public class TaiSanFragment extends Fragment {
     ListView listView;
     FloatingActionButton floatButton;
     ListTaiSanAdapter listAdapter;
-    Spinner spPhong;
-
+    Spinner spPhong, spTaiSan;
+    private String[] item;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +43,10 @@ public class TaiSanFragment extends Fragment {
         init(view);
         handleView();
         handleEvent();
-        setDataSpinnerPhong();
+        //spinner phong
+//        setDataSpinnerPhong();
+        //spinner tai san
+//        setDataSpinnerTaiSan();
         return view;
     }
 
@@ -72,6 +75,8 @@ public class TaiSanFragment extends Fragment {
         frameLayout = view.findViewById(R.id.empty);
         floatButton = view.findViewById(R.id.float_button);
         spPhong = view.findViewById(R.id.spinner_phong);
+        spTaiSan = view.findViewById(R.id.spinner_taisan);
+        item = getResources().getStringArray(R.array.taiSanType);
         //listview
         listView = view.findViewById(R.id.listview);
         listAdapter = new ListTaiSanAdapter(taiSanList, getContext());
@@ -102,6 +107,32 @@ public class TaiSanFragment extends Fragment {
                 Phong phong = (Phong) listPhong.get(position);
                 taiSanList = db.getTaiSanTrongPhong(phong.getMa());
                 listAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        ArrayAdapter<String> adapterTaiSan = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, listnamePhong);
+        adapterTaiSan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    }
+
+    public void setDataSpinnerTaiSan() {
+        //handle tai san filter
+        ArrayAdapter<String> adapterTaiSan = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, item);
+        adapterTaiSan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.spTaiSan.setAdapter(adapterTaiSan);
+        this.spTaiSan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String name = item[position];
+                if (name.equals("Lớn hơn 10 triệu")) {
+                    taiSanList = db.getTaiSanHon10Cu();
+                    listAdapter.notifyDataSetChanged();
+                } else {
+                    //get all
+                    System.out.println("name: " + name);
+                }
             }
 
             @Override
