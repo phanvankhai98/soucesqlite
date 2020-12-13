@@ -144,6 +144,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean deletePhong(int idphong) {
         SQLiteDatabase db = this.getWritableDatabase();
         int kq = db.delete(TABLE_PHONG, PHONG_ID + "=" + idphong, null);
+        List<TaiSan> taiSanList = getTaiSanTrongPhong(idphong);
+        for (TaiSan taiSan : taiSanList) {
+            taiSan.setViTri(0);
+            updateTaiSan(taiSan);
+        }
         db.close();
         return kq > 0;
     }
