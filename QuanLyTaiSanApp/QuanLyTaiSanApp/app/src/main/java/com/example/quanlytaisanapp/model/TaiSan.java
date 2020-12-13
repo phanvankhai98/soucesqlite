@@ -3,11 +3,11 @@ package com.example.quanlytaisanapp.model;
 import java.io.Serializable;
 
 public class TaiSan implements Serializable {
-    int ma;
-    String ten;
-    String loai;
-    int viTri;
-    double giaTri;
+    private int ma;
+    private String ten;
+    private String loai;
+    private int viTri;
+    private double giaTri;
 
     public TaiSan(int ma, String ten, String loai, int viTri, double giaTri) {
         this.ma = ma;

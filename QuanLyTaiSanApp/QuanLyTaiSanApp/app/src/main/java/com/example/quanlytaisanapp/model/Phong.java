@@ -3,12 +3,17 @@ package com.example.quanlytaisanapp.model;
 import java.io.Serializable;
 
 public class Phong implements Serializable {
-    int ma;
-    String ten;
-    String moTa;
+    private int ma;
+    private String ten;
+    private String moTa;
 
     public Phong(int ma, String ten, String moTa) {
         this.ma = ma;
+        this.ten = ten;
+        this.moTa = moTa;
+    }
+
+    public Phong(String ten, String moTa) {
         this.ten = ten;
         this.moTa = moTa;
     }

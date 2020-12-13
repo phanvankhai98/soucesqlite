@@ -3,12 +3,11 @@ package com.example.quanlytaisanapp.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +18,6 @@ import com.example.quanlytaisanapp.R;
 import com.example.quanlytaisanapp.adapter.ListPhongAdapter;
 import com.example.quanlytaisanapp.database.DatabaseHandler;
 import com.example.quanlytaisanapp.model.Phong;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -29,9 +27,11 @@ public class PhongFragment extends Fragment {
 
     DatabaseHandler db;
     FrameLayout frameLayout;
-    List<Phong> data;
+    List<Phong> phongList = new ArrayList<>();
     ListView listView;
     FloatingActionButton floatButton;
+    ListPhongAdapter listAdapter;
+
     public PhongFragment() {
     }
 
@@ -46,19 +46,32 @@ public class PhongFragment extends Fragment {
     }
 
     private void init(View view) {
-        db = new  DatabaseHandler(getContext());
-        data = db.getAllPhong();
+        db = new DatabaseHandler(getContext());
+        phongList = db.getAllPhong();
         frameLayout = view.findViewById(R.id.empty);
         floatButton = view.findViewById(R.id.float_button);
 
         //listview
         listView = view.findViewById(R.id.listview);
-        ListPhongAdapter listAdapter = new ListPhongAdapter(data,getContext());
+        listAdapter = new ListPhongAdapter(phongList, getContext());
         listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int roomId = phongList.get(i).getMa();
+                goToDetail(roomId);
+            }
+        });
+    }
+
+    public void goToDetail(int id) {
+        Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
+        intent.putExtra("roomId", id);
+        startActivityForResult(intent, 2);
     }
 
     private void handleView() {
-        if (data.isEmpty()) {
+        if (phongList.isEmpty()) {
             frameLayout.setVisibility(View.VISIBLE);
         } else
             frameLayout.setVisibility(View.INVISIBLE);
@@ -70,8 +83,20 @@ public class PhongFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
-                startActivity(intent);
+                intent.putExtra("type_room", "1");
+                startActivityForResult(intent, 1);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            phongList.clear();
+            phongList = db.getAllPhong();
+            listAdapter = new ListPhongAdapter(phongList, getContext());
+            listView.setAdapter(listAdapter);
+        }
     }
 }

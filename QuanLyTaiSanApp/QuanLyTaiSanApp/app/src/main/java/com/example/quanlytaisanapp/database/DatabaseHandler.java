@@ -40,7 +40,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String create_table_phong = String.format("" +
                         "CREATE TABLE \"%s\" (\n" +
-                        "\t\"%s\"\tINTEGER NOT NULL,\n" +
+                        "\t\"%s\"\tINTEGER ,\n" +
                         "\t\"%s\"\tTEXT,\n" +
                         "\t\"%s\"\tTEXT,\n" +
                         "\tPRIMARY KEY(\"%s\" AUTOINCREMENT)\n" +
@@ -48,12 +48,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 TABLE_PHONG, PHONG_ID, PHONG_TEN, PHONG_MO_TA, PHONG_ID);
         String create_table_tai_san = String.format(
                 "CREATE TABLE \"%s\" (\n" +
-                        "\t\"%s\"\tINTEGER NOT NULL,\n" +
+                        "\t\"%s\"\tINTEGER ,\n" +
                         "\t\"%s\"\tTEXT,\n" +
                         "\t\"%s\"\tTEXT,\n" +
                         "\t\"%s\"\tINTEGER,\n" +
                         "\t\"%s\"\tREAL,\n" +
-                        "\tPRIMARY KEY(\"%s\" AUTOINCREMENT)\n" +
+                        "\tPRIMARY KEY(\"%s\" AUTOINCREMENT )\n" +
                         ");",
                 TABLE_TAI_SAN,
                 TAI_SAN_ID,
@@ -80,7 +80,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(PHONG_ID, phong.getMa());
         values.put(PHONG_TEN, phong.getTen());
         values.put(PHONG_MO_TA, phong.getMoTa());
 
