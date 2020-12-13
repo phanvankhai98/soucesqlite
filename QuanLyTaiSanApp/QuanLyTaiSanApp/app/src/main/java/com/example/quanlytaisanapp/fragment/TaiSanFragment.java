@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -33,6 +34,8 @@ public class TaiSanFragment extends Fragment {
     DatabaseHandler db;
     FrameLayout frameLayout;
     List<TaiSan> taiSanList = new ArrayList<>();
+    List<Phong> listPhong;
+
     ListView listView;
     FloatingActionButton floatButton;
     ListTaiSanAdapter listAdapter;
@@ -61,6 +64,14 @@ public class TaiSanFragment extends Fragment {
     }
 
     private void handleEvent() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int taiSanID = taiSanList.get(i).getMa();
+                goToDetail(taiSanID);
+            }
+        });
+
         floatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +86,7 @@ public class TaiSanFragment extends Fragment {
         listView = view.findViewById(R.id.listview);
         db = new DatabaseHandler(getContext());
         taiSanList = db.getAllTaiSan();
+        listPhong = db.getAllPhong();
         frameLayout = view.findViewById(R.id.empty);
         floatButton = view.findViewById(R.id.float_button);
         spPhong = view.findViewById(R.id.spinner_phong);
@@ -82,26 +94,22 @@ public class TaiSanFragment extends Fragment {
         item = getResources().getStringArray(R.array.taiSanType);
         //listview
         listView = view.findViewById(R.id.listview);
-        listAdapter = new ListTaiSanAdapter(taiSanList, getContext(),db.getAllPhong());
+        listAdapter = new ListTaiSanAdapter(taiSanList, getContext(), listPhong);
         listView.setAdapter(listAdapter);
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int taiSanID = taiSanList.get(i).getMa();
-                goToDetail(taiSanID);
-            }
-        });
     }
+
     public void goToDetail(int id) {
-        Intent intent = new Intent(getActivity(), ChiTietPhongActivity.class);
+        Intent intent = new Intent(getActivity(), ChiTietTaiSanActivity.class);
         intent.putExtra("tai_san_id", id + "");
         startActivityForResult(intent, 4);
     }
+
     public void setDataSpinnerPhong() {
-        final List<Phong> listPhong = db.getAllPhong();
+        listPhong = db.getAllPhong();
         List<String> listnamePhong = new ArrayList<>();
+        listnamePhong.add("Tất cả");
         for (Phong phong : listPhong) {
             listnamePhong.add(phong.getTen());
         }
@@ -111,8 +119,12 @@ public class TaiSanFragment extends Fragment {
         this.spPhong.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Phong phong = (Phong) listPhong.get(position);
-                listAdapter.updateReceiptsList(db.getTaiSanTrongPhong(phong.getMa()));
+                if (position == 0) {
+                    listAdapter.updateReceiptsList(db.getAllTaiSan());
+                } else {
+                    Phong phong = listPhong.get(position - 1);
+                    listAdapter.updateReceiptsList(db.getTaiSanTrongPhong(phong.getMa()));
+                }
             }
 
             @Override
@@ -133,9 +145,11 @@ public class TaiSanFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String name = item[position];
                 if (name.equals("Lớn hơn 10 triệu")) {
-                    listAdapter.updateReceiptsList(db.getTaiSanHon10Cu());
+                    listAdapter.updateReceiptsList(db.getTaiSanHon10Cu(listPhong.get(spPhong.getSelectedItemPosition() > 0 ?
+                            spPhong.getSelectedItemPosition()- 1 : 0).getMa()));
                 } else {
                     //get all
+                    listAdapter.updateReceiptsList(db.getAllTaiSan());
                     System.out.println("name: " + name);
                 }
             }
@@ -149,8 +163,12 @@ public class TaiSanFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 3||requestCode == 4) {
-            listAdapter.updateReceiptsList(db.getAllTaiSan());
+        if (requestCode == 3 || requestCode == 4) {
+            List<TaiSan> list = db.getAllTaiSan();
+            listAdapter.updateReceiptsList(list);
+            if(list.isEmpty()){
+                frameLayout.setVisibility(View.VISIBLE);
+            }else frameLayout.setVisibility(View.INVISIBLE);
         }
     }
 }

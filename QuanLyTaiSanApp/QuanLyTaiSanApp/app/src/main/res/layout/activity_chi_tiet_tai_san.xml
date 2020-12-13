@@ -20,7 +20,22 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
+            android:id="@+id/til_ma_tai_san"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_ma_tai_san"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Mã tài sản"
+                android:inputType="text"
+                app:errorEnabled="true" />
+        </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_ten_tai_san"
             android:layout_width="match_parent"

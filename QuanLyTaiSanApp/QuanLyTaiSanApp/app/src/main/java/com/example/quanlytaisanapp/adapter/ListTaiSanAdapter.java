@@ -26,6 +26,7 @@ public class ListTaiSanAdapter extends BaseAdapter {
     public ListTaiSanAdapter(List<TaiSan> data, Context context, List<Phong> listPhong) {
         this.data = data;
         this.context = context;
+        this.listPhong = listPhong;
         layoutInflater = LayoutInflater.from(context);
     }
 
@@ -62,8 +63,10 @@ public class ListTaiSanAdapter extends BaseAdapter {
         final TaiSan taiSan = data.get(position);
 //
         holder.txtTenTaiSan.setText(taiSan.getTen());
-        holder.txtGia.setText(taiSan.getGiaTri()+"đ");
-//        holder.txtPhong.setText("Phòng "+listPhong.get(taiSan.getViTri()).getTen());
+        holder.txtGia.setText(taiSan.getGiaTri() + "đ");
+        holder.txtPhong.setText(taiSan.getViTri() == 0
+                ? "Chưa có vị trí"
+                : ("Phòng " + getTenPhong(taiSan.getViTri())));
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,10 +99,20 @@ public class ListTaiSanAdapter extends BaseAdapter {
         return convertView;
     }
 
+    String getTenPhong(int id) {
+        for (Phong i : listPhong) {
+            if (i.getMa() == id){
+                return i.getTen();
+            }
+        }
+        return "";
+    }
+
     public static class ViewHolder {
-        TextView txtTenTaiSan,txtGia,txtPhong;
+        TextView txtTenTaiSan, txtGia, txtPhong;
         ImageView imgDelete;
     }
+
     public void updateReceiptsList(List<TaiSan> newlist) {
         data.clear();
         data.addAll(newlist);

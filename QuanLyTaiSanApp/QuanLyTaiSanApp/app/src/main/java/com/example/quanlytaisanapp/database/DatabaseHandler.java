@@ -181,10 +181,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return getListTaiSan(cursor);
     }
 
-    public List<TaiSan> getTaiSanHon10Cu() {
+    public List<TaiSan> getTaiSanHon10Cu(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM  " + TABLE_TAI_SAN + " WHERE "
-                + TAI_SAN_GIA_TRI + " >= " + 10000000;
+                + TAI_SAN_GIA_TRI + " >= " + 10000000 +" AND "+TAI_SAN_VI_TRI +" = " + id ;
         Cursor cursor = db.rawQuery(query, null);
         return getListTaiSan(cursor);
     }
@@ -207,7 +207,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(TAI_SAN_VI_TRI, taiSan.getViTri());
         values.put(TAI_SAN_GIA_TRI, taiSan.getGiaTri());
 
-        int kq = db.update(TABLE_PHONG, values, PHONG_ID + "=" + taiSan.getMa(), null);
+        int kq = db.update(TABLE_TAI_SAN, values, TAI_SAN_ID + "=" + taiSan.getMa(), null);
         db.close();
         return kq > 0;
     }
@@ -242,6 +242,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
         return data;
+    }
+    public TaiSan getTaiSanById(String taiSanID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_TAI_SAN + " WHERE " + TAI_SAN_ID + " = " + taiSanID;
+        List<TaiSan> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            TaiSan taiSan = new TaiSan(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getDouble(4)
+            );
+            data.add(taiSan);
+            cursor.moveToNext();
+        }
+        db.close();
+        return data.get(0);
     }
 
 }
