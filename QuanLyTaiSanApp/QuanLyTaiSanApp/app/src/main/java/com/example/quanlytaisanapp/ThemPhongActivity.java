@@ -30,7 +30,7 @@ public class ThemPhongActivity extends AppCompatActivity {
     }
 
     private void init() {
-        edtRoomName = findViewById(R.id.edt_name_room);
+        edtRoomName = findViewById(R.id.edt_name_room); 
         edtRoomDes = findViewById(R.id.edt_des_room);
         tilRoomName = findViewById(R.id.til_name_room);
         tilRoomDes = findViewById(R.id.til_des_room);
