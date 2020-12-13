@@ -14,50 +14,33 @@ import com.example.quanlytaisanapp.model.Phong;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class ChiTietPhongActivity extends AppCompatActivity {
+public class ThemPhongActivity extends AppCompatActivity {
+
     private Toolbar toolbar;
     private TextInputEditText edtRoomName, edtRoomId, edtRoomDes;
     private TextInputLayout tilRoomName, tilRoomId, tilRoomDes;
-    DatabaseHandler databaseHelper;
-    String type = "";
-    String roomId;
     private String roomName, roomDes;
     private Button btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chi_tiet_phong);
-        roomId = getIntent().getStringExtra("roomId");
+        setContentView(R.layout.activity_them_phong);
         init();
-        setDataPhong(roomId);
-    }
-
-    private void setDataPhong(String roomId) {
-        Phong phong = databaseHelper.getPhongById(roomId);
-        edtRoomId.setText(phong.getMa() + "");
-        edtRoomName.setText(phong.getTen());
-        edtRoomDes.setText(phong.getMoTa());
-
     }
 
     private void init() {
-        edtRoomId = findViewById(R.id.edt_phong_id);
-        edtRoomId.setFocusable(false);
-        edtRoomId.setEnabled(false);
         edtRoomName = findViewById(R.id.edt_name_room);
         edtRoomDes = findViewById(R.id.edt_des_room);
-        tilRoomId = findViewById(R.id.til_phong_id);
         tilRoomName = findViewById(R.id.til_name_room);
         tilRoomDes = findViewById(R.id.til_des_room);
         toolbar = findViewById(R.id.toolbar);
         btnSubmit = findViewById(R.id.btn_submit);
         setToolbar();
-        databaseHelper = new DatabaseHandler(getBaseContext());
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editRoom();
+                addRoom();
             }
         });
     }
@@ -66,6 +49,7 @@ public class ChiTietPhongActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("Thêm Phòng");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +58,7 @@ public class ChiTietPhongActivity extends AppCompatActivity {
         });
     }
 
-    public void editRoom() {
+    public void addRoom() {
         getDataInput();
         setDefaultError();
         boolean cancel = false;
@@ -92,13 +76,11 @@ public class ChiTietPhongActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            int id = Integer.parseInt(roomId);
-            Phong phong = new Phong(id, roomName, roomDes);
-            Boolean kq = databaseHelper.updatePhong(phong);
-            if (kq) {
-                Toast.makeText(getBaseContext(), "Cập nhật dữ liệu thành công", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+            Phong phong = new Phong(roomName, roomDes);
+            DatabaseHandler databaseHelper = new DatabaseHandler(getBaseContext());
+            databaseHelper.addPhong(phong);
+            Toast.makeText(getBaseContext(), "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
@@ -109,7 +91,6 @@ public class ChiTietPhongActivity extends AppCompatActivity {
 
     public void setDefaultError() {
         tilRoomDes.setError(null);
-        tilRoomId.setError(null);
         tilRoomName.setError(null);
     }
 

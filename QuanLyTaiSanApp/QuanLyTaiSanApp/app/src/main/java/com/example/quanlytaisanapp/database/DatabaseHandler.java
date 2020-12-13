@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
 import com.example.quanlytaisanapp.model.Phong;
 import com.example.quanlytaisanapp.model.TaiSan;
 
@@ -53,7 +54,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         "\t\"%s\"\tTEXT,\n" +
                         "\t\"%s\"\tINTEGER,\n" +
                         "\t\"%s\"\tREAL,\n" +
-                        "\tPRIMARY KEY(\"%s\" AUTOINCREMENT )\n" +
+                        "\tPRIMARY KEY(\"%s\" AUTOINCREMENT )" +
+                        " FOREIGN KEY (" + TAI_SAN_VI_TRI + ") REFERENCES " + TABLE_PHONG + "(" + PHONG_ID + ")\n" +
                         ");",
                 TABLE_TAI_SAN,
                 TAI_SAN_ID,
@@ -106,6 +108,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return data;
     }
 
+    public Phong getPhongById(String phongId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_PHONG + " WHERE " + PHONG_ID + " = " + phongId;
+        List<Phong> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Phong nhom = new Phong(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2)
+            );
+            data.add(nhom);
+            cursor.moveToNext();
+        }
+        db.close();
+        return data.get(0);
+    }
+
+
     public boolean updatePhong(Phong phong) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -153,11 +175,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<TaiSan> getTaiSanTrongPhong(int idPhong) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM  " + TABLE_TAI_SAN + " WHERE "
-                + TAI_SAN_VI_TRI + " LIKE '%"
-                + idPhong + "%' LIMIT 0, 49999;";
+                + TAI_SAN_VI_TRI + " = " + idPhong;
         List<TaiSan> data = new ArrayList<>();
         Cursor cursor = db.rawQuery(query, null);
-        return getListTaiSan(cursor);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            TaiSan taiSan = new TaiSan(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getDouble(4)
+            );
+            data.add(taiSan);
+            cursor.moveToNext();
+        }
+        return data;
     }
 
 
@@ -183,7 +216,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return kq > 0;
     }
 
-    public boolean updateTaiSanTrongPhong(TaiSan taiSan,int idPhong) {
+    public boolean updateTaiSanTrongPhong(TaiSan taiSan, int idPhong) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 

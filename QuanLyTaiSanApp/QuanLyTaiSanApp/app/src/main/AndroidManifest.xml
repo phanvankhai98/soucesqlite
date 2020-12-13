@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ChiTietTaiSanActivity"></activity>
+        <activity android:name=".ThemPhongActivity"></activity>
         <activity android:name=".ChiTietPhongActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
