@@ -5,17 +5,17 @@ public class SinhVien {
     private String name;
     private String bod;
     private String address;
-    private Integer teacerId;
+    private Integer teacherId;
 
     public SinhVien() {
     }
 
-    public SinhVien(Integer id, String name, String bod, String address, Integer teacerId) {
+    public SinhVien(Integer id, String name, String bod, String address, Integer teacherId) {
         this.id = id;
         this.name = name;
         this.bod = bod;
         this.address = address;
-        this.teacerId = teacerId;
+        this.teacherId = teacherId;
     }
 
     public SinhVien(Integer id, String name, String bod, String address) {
@@ -24,11 +24,11 @@ public class SinhVien {
         this.bod = bod;
         this.address = address;
     }
-    public SinhVien( String name, String bod, String address, Integer teacerId) {
+    public SinhVien( String name, String bod, String address, Integer teacherId) {
         this.name = name;
         this.bod = bod;
         this.address = address;
-        this.teacerId = teacerId;
+        this.teacherId = teacherId;
     }
     public Integer getId() {
         return id;
@@ -62,11 +62,11 @@ public class SinhVien {
         this.address = address;
     }
 
-    public Integer getTeacerId() {
-        return teacerId;
+    public Integer getTeacherId() {
+        return teacherId;
     }
 
-    public void setTeacerId(Integer teacerId) {
-        this.teacerId = teacerId;
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
     }
 }

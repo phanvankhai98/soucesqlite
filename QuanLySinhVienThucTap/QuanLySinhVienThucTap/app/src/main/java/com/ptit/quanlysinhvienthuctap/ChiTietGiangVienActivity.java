@@ -61,7 +61,7 @@ public class ChiTietGiangVienActivity extends AppCompatActivity {
         giangVienID = getIntent().getStringExtra("giang_vien_id");
 
         if(giangVienID == null)
-            edtGiangVienId.setVisibility(View.GONE);
+            tilGiangVienId.setVisibility(View.GONE);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +85,7 @@ public class ChiTietGiangVienActivity extends AppCompatActivity {
     public void editRoom() {
         getDataInput();
         setDefaultError();
+        String regex = "[0-9]+";
         boolean cancel = false;
         View focusView = null;
         if (TextUtils.isEmpty(giangVienName)) {
@@ -97,6 +98,10 @@ public class ChiTietGiangVienActivity extends AppCompatActivity {
             cancel = true;
         } else if (TextUtils.isEmpty(giangVienExp)) {
             tilExp.setError("Không để trống");
+            focusView = tilExp;
+            cancel = true;
+        }else if (!giangVienExp.matches(regex)) {
+            tilExp.setError("Không phải số");
             focusView = tilExp;
             cancel = true;
         }

@@ -56,7 +56,7 @@ public class ChiTietSinhVienActivity extends AppCompatActivity {
         if (sinhVienID != null) {
             int viTriSpnnerPhong = 0;
             for (GiangVien i : listGiangVien) {
-                if (i.getId() == sinhVien.getTeacerId()) {
+                if (i.getId() == sinhVien.getTeacherId()) {
                     viTriSpnnerPhong = listGiangVien.indexOf(i);
                     isExist = true;
                     break;
@@ -119,6 +119,7 @@ public class ChiTietSinhVienActivity extends AppCompatActivity {
     public void editRoom() {
         getDataInput();
         setDefaultError();
+
         boolean cancel = false;
         View focusView = null;
         if (TextUtils.isEmpty(sinhVienName)) {

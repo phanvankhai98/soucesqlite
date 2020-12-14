@@ -23,7 +23,7 @@
     <ImageView
         android:id="@+id/img_delete"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_weight="2"
-        android:src="@drawable/delete_bin" />
+        android:src="@mipmap/x_ic" />
 </LinearLayout>

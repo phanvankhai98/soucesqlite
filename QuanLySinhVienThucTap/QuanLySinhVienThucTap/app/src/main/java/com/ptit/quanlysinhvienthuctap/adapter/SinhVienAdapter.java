@@ -23,7 +23,7 @@ public class SinhVienAdapter extends BaseAdapter {
     Context context;
     LayoutInflater layoutInflater;
 
-    public SinhVienAdapter(List<SinhVien> data, Context context,List<GiangVien> listGV ) {
+    public SinhVienAdapter(List<SinhVien> data, Context context, List<GiangVien> listGV) {
         this.data = data;
         this.context = context;
         this.listGV = listGV;
@@ -49,9 +49,10 @@ public class SinhVienAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.item_row, null);
+            convertView = layoutInflater.inflate(R.layout.item_sv_row, null);
             holder = new ViewHolder();
-            holder.txtName = convertView.findViewById(R.id.tv_name);
+            holder.txtName = convertView.findViewById(R.id.tv_ten);
+            holder.txtGV = convertView.findViewById(R.id.tv_gv);
             holder.imgDelete = convertView.findViewById(R.id.img_delete);
             convertView.setTag(holder);
         } else {
@@ -60,6 +61,7 @@ public class SinhVienAdapter extends BaseAdapter {
         final SinhVien sinhVien = data.get(position);
 
         holder.txtName.setText(sinhVien.getName());
+        holder.txtGV.setText(getTenGV(sinhVien.getTeacherId()));
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,8 +77,8 @@ public class SinhVienAdapter extends BaseAdapter {
                                 DatabaseHandler databaseHelper = new DatabaseHandler(context);
                                 databaseHelper.deleteStudent(sinhVien.getId());
                                 data.remove(sinhVien);
-                                List<SinhVien> tmp = data;
-                                updateReceiptsList(tmp);
+                                notifyDataSetChanged();
+
                             }
                         });
                 builder1.setPositiveButton(
@@ -94,8 +96,21 @@ public class SinhVienAdapter extends BaseAdapter {
         return convertView;
     }
 
+    String getTenGV(Integer id) {
+        if ( id == null || id == 0)
+            return "Chưa có giáo viên hướng dẫn";
+        else {
+            for (GiangVien gv : listGV) {
+                if (id == gv.getId()) return "Giáo viên:" + gv.getName();
+            }
+        }
+        return "Chưa có giáo viên hướng dẫn";
+
+    }
+
     public static class ViewHolder {
         TextView txtName;
+        TextView txtGV;
         ImageView imgDelete;
     }
 

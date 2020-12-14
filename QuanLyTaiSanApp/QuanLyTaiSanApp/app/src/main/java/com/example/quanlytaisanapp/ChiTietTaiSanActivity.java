@@ -112,6 +112,7 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
 
     public void addTaiSan() {
         getDataInput();
+        String regex = "[0-9]+";
         setDefaultError();
         boolean cancel = false;
         View focusView = null;
@@ -125,6 +126,10 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
             cancel = true;
         } else if (TextUtils.isEmpty(giaTri)) {
             tilGiaTri.setError("Không để trống");
+            focusView = tilGiaTri;
+            cancel = true;
+        }else if (!giaTri.matches(regex)) {
+            tilGiaTri.setError("Vui lòng nhập số");
             focusView = tilGiaTri;
             cancel = true;
         }

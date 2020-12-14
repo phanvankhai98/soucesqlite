@@ -72,8 +72,7 @@ public class GiangVienAdapter extends BaseAdapter {
                                 DatabaseHandler databaseHelper = new DatabaseHandler(context);
                                 databaseHelper.deleteGiangVien(giangVien.getId());
                                 data.remove(giangVien);
-                                List<GiangVien> tmp =data;
-                                updateReceiptsList(tmp);
+                                notifyDataSetChanged();
                             }
                         });
                 builder1.setPositiveButton(

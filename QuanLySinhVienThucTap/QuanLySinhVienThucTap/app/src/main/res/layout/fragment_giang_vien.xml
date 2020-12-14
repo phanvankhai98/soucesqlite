@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/empty"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/spinner_sinh_vien"></ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/float_button"
@@ -64,6 +64,7 @@
         android:layout_marginRight="25dp"
         android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@mipmap/ic_plus"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <FrameLayout

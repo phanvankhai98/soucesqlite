@@ -73,8 +73,8 @@ public class ListPhongAdapter extends BaseAdapter {
                                 DatabaseHandler databaseHelper = new DatabaseHandler(context);
                                 databaseHelper.deletePhong(phong.getMa());
                                 data.remove(phong);
-                                List<Phong> tmp =data;
-                                updateReceiptsList(tmp);
+                                notifyDataSetChanged();
+
                             }
                         });
                 builder1.setPositiveButton(
