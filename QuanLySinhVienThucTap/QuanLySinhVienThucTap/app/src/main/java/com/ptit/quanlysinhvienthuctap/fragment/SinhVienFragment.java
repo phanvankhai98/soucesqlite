@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ptit.quanlysinhvienthuctap.R;
-import com.ptit.quanlysinhvienthuctap.ThemSinhVienActivity;
+import com.ptit.quanlysinhvienthuctap.ChiTietSinhVienActivity;
 import com.ptit.quanlysinhvienthuctap.adapter.SinhVienAdapter;
 import com.ptit.quanlysinhvienthuctap.database.DatabaseHandler;
 import com.ptit.quanlysinhvienthuctap.model.GiangVien;
@@ -71,7 +71,7 @@ public class SinhVienFragment extends Fragment {
         floatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ThemSinhVienActivity.class);
+                Intent intent = new Intent(getActivity(), ChiTietSinhVienActivity.class);
                 intent.putExtra("type_edit", "1");
                 startActivityForResult(intent, 3);
             }
@@ -102,7 +102,7 @@ public class SinhVienFragment extends Fragment {
         });
     }
     public void goToDetail(int id) {
-        Intent intent = new Intent(getActivity(), ThemSinhVienActivity.class);
+        Intent intent = new Intent(getActivity(), ChiTietSinhVienActivity.class);
         intent.putExtra("tai_san_id", id + "");
         startActivityForResult(intent, 4);
     }

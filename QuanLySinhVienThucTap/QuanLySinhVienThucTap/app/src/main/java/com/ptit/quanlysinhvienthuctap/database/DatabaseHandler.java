@@ -87,14 +87,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //sinh vien ----------------------------------
-    public void addSinhVien(SinhVien sinhVien) {
+    public boolean addSinhVien(SinhVien sinhVien) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(STUDENT_NAME, sinhVien.getName());
         values.put(STUDENT_BOD, sinhVien.getName());
         values.put(STUDENT_ADDRESS, sinhVien.getName());
-        db.insert(STUDENT_TABLE_NAME, null, values);
+        long kq = db.insert(STUDENT_TABLE_NAME, null, values);
         db.close();
+        return kq>0;
     }
 
     public List<SinhVien> getAllSinhVien() {
@@ -185,14 +186,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return data;
     }
     //Giang Vien ----------------------------------
-    public void addGiangVien(GiangVien giangVien) {
+    public boolean addGiangVien(GiangVien giangVien) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TEACHER_NAME, giangVien.getName());
-        values.put(TEACHER_BOD, giangVien.getName());
+        values.put(TEACHER_BOD, giangVien.getBod());
         values.put(TEACHER_EXP, giangVien.getExp());
-        db.insert(STUDENT_TABLE_NAME, null, values);
+        long kq = db.insert(TEACHER_TABLE_NAME, null, values);
         db.close();
+        return kq>0;
     }
 
     public List<GiangVien> getAllGiangVien() {
@@ -213,6 +215,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         db.close();
         return data;
+    }
+    public boolean deleteGiangVien(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int kq = db.delete(TEACHER_TABLE_NAME, TEACHER_ID + "=" + id, null);
+        db.close();
+        return kq > 0;
     }
 
     public GiangVien getGiangVienById(String id) {
@@ -242,7 +250,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         values.put(TEACHER_ID, giangVien.getId());
         values.put(TEACHER_NAME, giangVien.getName());
-        values.put(TEACHER_BOD, giangVien.getName());
+        values.put(TEACHER_BOD, giangVien.getBod());
         values.put(TEACHER_EXP, giangVien.getExp());
 
         int kq = db.update(TEACHER_TABLE_NAME, values, TEACHER_ID + "=" + giangVien.getId(), null);

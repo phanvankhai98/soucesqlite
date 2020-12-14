@@ -20,6 +20,12 @@ public class GiangVien {
         this.list = list;
     }
 
+    public GiangVien(String name, String bod, Integer exp) {
+        this.name = name;
+        this.bod = bod;
+        this.exp = exp;
+    }
+
     public GiangVien(Integer id, String name, String bod, Integer exp) {
         this.id = id;
         this.name = name;
