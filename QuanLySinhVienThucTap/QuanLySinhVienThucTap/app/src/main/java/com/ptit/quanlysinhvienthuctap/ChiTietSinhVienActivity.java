@@ -6,7 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -15,35 +17,65 @@ import com.ptit.quanlysinhvienthuctap.database.DatabaseHandler;
 import com.ptit.quanlysinhvienthuctap.model.GiangVien;
 import com.ptit.quanlysinhvienthuctap.model.SinhVien;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChiTietSinhVienActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TextInputEditText edtSinhVienName, edtSinhVienId, edtSinhVienNamSinh, edtSinhVienQueQuan;
     private TextInputLayout tilSinhVienName, tilSinhVienId, tilSinhVienNamSinh, tilSinhVienQueQuan;
     DatabaseHandler databaseHelper;
+    Spinner spinner;
     String typeChange = "";
     String sinhVienID;
     private String sinhVienName, sinhVienNamSinh, sinhVienQueQuan;
     private Button btnSubmit;
+    SinhVien sinhVien;
+    List<GiangVien> listGiangVien = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_sinh_vien);
         init();
-        if(sinhVienID != null)
+        if (sinhVienID != null)
             setDataPhong(sinhVienID);
+        handleView();
+
+    }
+
+    private void handleView() {
+        List<String> tenPhong = new ArrayList<>();
+        tenPhong.add("Trống");
+        for (GiangVien i : listGiangVien) {
+            tenPhong.add(i.getName());
+        }
+        boolean isExist = false;
+        setSpinner(tenPhong);
+        if (sinhVienID != null) {
+            int viTriSpnnerPhong = 0;
+            for (GiangVien i : listGiangVien) {
+                if (i.getId() == sinhVien.getTeacerId()) {
+                    viTriSpnnerPhong = listGiangVien.indexOf(i);
+                    isExist = true;
+                    break;
+                }
+            }
+            spinner.setSelection(!isExist ? 0 : (viTriSpnnerPhong + 1));
+        }
     }
 
     private void setDataPhong(String giangVienID) {
-        SinhVien sinhVien = databaseHelper.getSinhVienById(giangVienID);
+        sinhVien = databaseHelper.getSinhVienById(giangVienID);
         edtSinhVienId.setText(sinhVien.getId() + "");
         edtSinhVienName.setText(sinhVien.getName());
         edtSinhVienNamSinh.setText(sinhVien.getBod());
-        edtSinhVienQueQuan.setText(sinhVien.getAddress()+"");
+        edtSinhVienQueQuan.setText(sinhVien.getAddress() + "");
     }
 
     private void init() {
+        spinner = findViewById(R.id.spinner);
         edtSinhVienId = findViewById(R.id.edt_sinh_vien_id);
         edtSinhVienId.setFocusable(false);
         edtSinhVienId.setEnabled(false);
@@ -58,11 +90,12 @@ public class ChiTietSinhVienActivity extends AppCompatActivity {
         btnSubmit = findViewById(R.id.btn_submit);
         setToolbar();
         databaseHelper = new DatabaseHandler(getBaseContext());
+        listGiangVien = databaseHelper.getAllGiangVien();
         sinhVienID = getIntent().getStringExtra("sinh_vien_id");
 
-        if(sinhVienID == null)
-            edtSinhVienId.setVisibility(View.GONE);
-        else edtSinhVienId.setVisibility(View.VISIBLE);
+        if (sinhVienID == null)
+            tilSinhVienId.setVisibility(View.GONE);
+        else tilSinhVienId.setVisibility(View.VISIBLE);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,16 +138,20 @@ public class ChiTietSinhVienActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            if(sinhVienID != null){
+            if (sinhVienID != null) {
                 int id = Integer.parseInt(sinhVienID);
-                SinhVien sinhVien = new SinhVien(id, sinhVienName, sinhVienNamSinh, sinhVienQueQuan);
+                SinhVien sinhVien = new SinhVien(id, sinhVienName, sinhVienNamSinh, sinhVienQueQuan,
+                        spinner.getSelectedItemPosition()== 0 ? 0
+                                :listGiangVien.get(spinner.getSelectedItemPosition()-1).getId());
                 Boolean kq = databaseHelper.updateSinhVien(sinhVien);
                 if (kq) {
                     Toast.makeText(getBaseContext(), "Cập nhật sinh viên thành công", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-            }else{
-                SinhVien sinhVien = new SinhVien(sinhVienName, sinhVienNamSinh,sinhVienQueQuan);
+            } else {
+                SinhVien sinhVien = new SinhVien(sinhVienName, sinhVienNamSinh, sinhVienQueQuan,
+                        spinner.getSelectedItemPosition()== 0 ? 0
+                                :listGiangVien.get(spinner.getSelectedItemPosition()-1).getId());
                 Boolean kq = databaseHelper.addSinhVien(sinhVien);
                 if (kq) {
                     Toast.makeText(getBaseContext(), "Thêm sinh viên thành công", Toast.LENGTH_SHORT).show();
@@ -134,5 +171,10 @@ public class ChiTietSinhVienActivity extends AppCompatActivity {
         tilSinhVienNamSinh.setError(null);
         tilSinhVienId.setError(null);
         tilSinhVienName.setError(null);
+    }
+
+    void setSpinner(List<String> strings) {
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, strings);
+        spinner.setAdapter(adapter);
     }
 }

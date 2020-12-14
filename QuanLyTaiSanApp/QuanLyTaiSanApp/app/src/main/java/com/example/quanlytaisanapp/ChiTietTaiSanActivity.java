@@ -34,11 +34,9 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_tai_san);
-
         init();
         handleView();
         handleEvent();
-
     }
 
     private void handleEvent() {
@@ -48,6 +46,7 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
                 addTaiSan();
             }
         });
+
     }
 
     private void handleView() {

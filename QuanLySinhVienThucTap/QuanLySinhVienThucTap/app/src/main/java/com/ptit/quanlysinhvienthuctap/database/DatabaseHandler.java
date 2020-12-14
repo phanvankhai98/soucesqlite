@@ -59,7 +59,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 " ON DELETE CASCADE" +
                 ");" ;
         db.execSQL(createTableStudent);
-
         //create table book
         String createTableClass = "CREATE TABLE " + CLASS_TABLE_NAME + " (" +
                 CLASS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -93,6 +92,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(STUDENT_NAME, sinhVien.getName());
         values.put(STUDENT_BOD, sinhVien.getName());
         values.put(STUDENT_ADDRESS, sinhVien.getName());
+        values.put(STUDENT_TEACHER_ID, sinhVien.getTeacerId());
         long kq = db.insert(STUDENT_TABLE_NAME, null, values);
         db.close();
         return kq>0;
@@ -129,7 +129,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2),
-                    cursor.getString(3)
+                    cursor.getString(3),
+                    cursor.getInt(4)
             );
             data.add(sinhVien);
             cursor.moveToNext();
@@ -147,6 +148,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(STUDENT_NAME, sinhVien.getName());
         values.put(STUDENT_BOD, sinhVien.getName());
         values.put(STUDENT_ADDRESS, sinhVien.getName());
+        values.put(STUDENT_TEACHER_ID, sinhVien.getTeacerId());
 
         int kq = db.update(STUDENT_TABLE_NAME, values, STUDENT_ID + " = " + sinhVien.getId(), null);
         db.close();

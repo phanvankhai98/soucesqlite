@@ -24,7 +24,7 @@ public class SinhVien {
         this.bod = bod;
         this.address = address;
     }
-    public SinhVien( String name, String bod, String address) {
+    public SinhVien( String name, String bod, String address, Integer teacerId) {
         this.name = name;
         this.bod = bod;
         this.address = address;

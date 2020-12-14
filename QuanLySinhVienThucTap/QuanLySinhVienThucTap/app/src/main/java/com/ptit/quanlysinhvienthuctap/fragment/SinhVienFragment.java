@@ -72,7 +72,6 @@ public class SinhVienFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ChiTietSinhVienActivity.class);
-                intent.putExtra("type_edit", "1");
                 startActivityForResult(intent, 3);
             }
         });
@@ -103,7 +102,7 @@ public class SinhVienFragment extends Fragment {
     }
     public void goToDetail(int id) {
         Intent intent = new Intent(getActivity(), ChiTietSinhVienActivity.class);
-        intent.putExtra("tai_san_id", id + "");
+        intent.putExtra("sinh_vien_id", id + "");
         startActivityForResult(intent, 4);
     }
     public void setDataSpinnerGianVien() {
