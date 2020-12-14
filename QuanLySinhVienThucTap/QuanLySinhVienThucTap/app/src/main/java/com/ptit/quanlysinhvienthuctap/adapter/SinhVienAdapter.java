@@ -75,8 +75,7 @@ public class SinhVienAdapter extends BaseAdapter {
                                 DatabaseHandler databaseHelper = new DatabaseHandler(context);
                                 databaseHelper.deleteStudent(sinhVien.getId());
                                 data.remove(sinhVien);
-                                List<SinhVien> tmp = data;
-                                updateReceiptsList(tmp);
+                                notifyDataSetChanged();
                             }
                         });
                 builder1.setPositiveButton(
