@@ -57,7 +57,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 " FOREIGN KEY ( " + STUDENT_TEACHER_ID + ") REFERENCES " +
                 TEACHER_TABLE_NAME + " ( " + TEACHER_ID + " )" +
                 " ON DELETE CASCADE" +
-                ");" ;
+                ");";
         db.execSQL(createTableStudent);
         //create table book
         String createTableClass = "CREATE TABLE " + CLASS_TABLE_NAME + " (" +
@@ -95,7 +95,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(STUDENT_TEACHER_ID, sinhVien.getTeacerId());
         long kq = db.insert(STUDENT_TABLE_NAME, null, values);
         db.close();
-        return kq>0;
+        return kq > 0;
     }
 
     public List<SinhVien> getAllSinhVien() {
@@ -154,6 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return kq > 0;
     }
+
     public boolean deleteStudent(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int kq = db.delete(STUDENT_TABLE_NAME, STUDENT_ID + "=" + id, null);
@@ -187,6 +188,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return data;
     }
+
     //Giang Vien ----------------------------------
     public boolean addGiangVien(GiangVien giangVien) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -196,7 +198,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(TEACHER_EXP, giangVien.getExp());
         long kq = db.insert(TEACHER_TABLE_NAME, null, values);
         db.close();
-        return kq>0;
+        return kq > 0;
     }
 
     public List<GiangVien> getAllGiangVien() {
@@ -218,6 +220,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return data;
     }
+
     public boolean deleteGiangVien(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int kq = db.delete(TEACHER_TABLE_NAME, TEACHER_ID + "=" + id, null);
@@ -243,6 +246,53 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         db.close();
         return data.get(0);
+    }
+
+    public List<GiangVien> getGiangVien10NamKinhNghiem() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TEACHER_TABLE_NAME + " WHERE " + TEACHER_EXP + " >= " + 10;
+        List<GiangVien> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            GiangVien giangVien = new GiangVien(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3)
+            );
+            data.add(giangVien);
+            cursor.moveToNext();
+        }
+        db.close();
+        return data;
+    }
+
+    public List<GiangVien> getGiangVienSoSinhVienLonHon5() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TEACHER_TABLE_NAME;
+        List<GiangVien> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            GiangVien giangVien = new GiangVien(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3)
+            );
+            data.add(giangVien);
+            cursor.moveToNext();
+        }
+        List<GiangVien> list = new ArrayList<>();
+        for (GiangVien giangVien : data) {
+            List<SinhVien> listSinhVien = getSinhVienCuaGV(giangVien.getId());
+            if (listSinhVien.size() >= 5) {
+                list.add(giangVien);
+            }
+        }
+        db.close();
+        return list;
     }
 
 

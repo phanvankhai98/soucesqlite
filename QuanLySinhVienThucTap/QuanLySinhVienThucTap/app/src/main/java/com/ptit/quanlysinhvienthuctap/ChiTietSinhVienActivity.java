@@ -1,8 +1,5 @@
 package com.ptit.quanlysinhvienthuctap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,6 +7,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -141,17 +141,18 @@ public class ChiTietSinhVienActivity extends AppCompatActivity {
             if (sinhVienID != null) {
                 int id = Integer.parseInt(sinhVienID);
                 SinhVien sinhVien = new SinhVien(id, sinhVienName, sinhVienNamSinh, sinhVienQueQuan,
-                        spinner.getSelectedItemPosition()== 0 ? 0
-                                :listGiangVien.get(spinner.getSelectedItemPosition()-1).getId());
+                        spinner.getSelectedItemPosition() == 0 ? 0
+                                : listGiangVien.get(spinner.getSelectedItemPosition() - 1).getId());
                 Boolean kq = databaseHelper.updateSinhVien(sinhVien);
                 if (kq) {
                     Toast.makeText(getBaseContext(), "Cập nhật sinh viên thành công", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             } else {
+                int id = spinner.getSelectedItemPosition() == 0 ? 0 : listGiangVien.get(spinner.getSelectedItemPosition() - 1).getId();
                 SinhVien sinhVien = new SinhVien(sinhVienName, sinhVienNamSinh, sinhVienQueQuan,
-                        spinner.getSelectedItemPosition()== 0 ? 0
-                                :listGiangVien.get(spinner.getSelectedItemPosition()-1).getId());
+                        spinner.getSelectedItemPosition() == 0 ? 0
+                                : listGiangVien.get(spinner.getSelectedItemPosition() - 1).getId());
                 Boolean kq = databaseHelper.addSinhVien(sinhVien);
                 if (kq) {
                     Toast.makeText(getBaseContext(), "Thêm sinh viên thành công", Toast.LENGTH_SHORT).show();

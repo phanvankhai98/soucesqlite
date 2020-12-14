@@ -29,15 +29,33 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tv_kinh_nghiem"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/tv_sinh_Vien"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Số sinh viên:"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_kinh_nghiem" />
+
+    <Spinner
+        android:id="@+id/spinner_sinh_vien"
+        android:layout_width="312dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_sinh_Vien"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_kinh_nghiem" />
 
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_kinh_nghiem" />
+        app:layout_constraintTop_toTopOf="@+id/empty"></ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/float_button"
@@ -50,15 +68,13 @@
 
     <FrameLayout
         android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="invisible"
+        android:layout_width="408dp"
+        android:layout_height="390dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_kinh_nghiem">
+        app:layout_constraintTop_toBottomOf="@+id/spinner_sinh_vien"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="3dp">
 
-        <include
-            layout="@layout/empty_element"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,7 @@ public class SinhVien {
         this.name = name;
         this.bod = bod;
         this.address = address;
+        this.teacerId = teacerId;
     }
     public Integer getId() {
         return id;

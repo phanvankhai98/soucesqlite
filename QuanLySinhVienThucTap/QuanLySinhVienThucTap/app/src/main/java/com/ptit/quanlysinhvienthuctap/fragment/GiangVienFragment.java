@@ -2,11 +2,6 @@ package com.ptit.quanlysinhvienthuctap.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ptit.quanlysinhvienthuctap.ChiTietGiangVienActivity;
@@ -39,8 +38,9 @@ public class GiangVienFragment extends Fragment {
     ListView listView;
     FloatingActionButton floatButton;
     GiangVienAdapter giangVienAdapter;
-    Spinner spinner;
-    private String[] item;
+    Spinner spinnerKinhNghiem, spinnerSinhVien;
+    private String[] itemKinhNghiem, itemSinhVien;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -56,9 +56,12 @@ public class GiangVienFragment extends Fragment {
         listGiangVien = db.getAllGiangVien();
         frameLayout = view.findViewById(R.id.empty);
         floatButton = view.findViewById(R.id.float_button);
-        item = getResources().getStringArray(R.array.soNamKinhNghiem);
-        spinner = view.findViewById(R.id.spinner_kinh_nghiem);
-        setDataSpinnerTaiSan();
+        itemKinhNghiem = getResources().getStringArray(R.array.soNamKinhNghiem);
+        spinnerKinhNghiem = view.findViewById(R.id.spinner_kinh_nghiem);
+        itemSinhVien = getResources().getStringArray(R.array.soSinhVien);
+        spinnerSinhVien = view.findViewById(R.id.spinner_sinh_vien);
+        setDataSpinnerKinhNghiem();
+        setDataSpinnerSinhVien();
 
         //listview
         listView = view.findViewById(R.id.listview);
@@ -96,32 +99,57 @@ public class GiangVienFragment extends Fragment {
             }
         });
     }
-    public void setDataSpinnerTaiSan() {
+
+    public void setDataSpinnerKinhNghiem() {
         //handle tai san filter
-        ArrayAdapter<String> adapterSpinner = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, item);
-        spinner.setAdapter(adapterSpinner);
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String name = item[position];
-////                if (name.equals("Lớn hơn 10 triệu")) {
-////                    listAdapter.updateReceiptsList(db.getTaiSanHon10Cu(listPhong.get(spPhong.getSelectedItemPosition() > 0 ?
-////                            spPhong.getSelectedItemPosition()- 1 : 0).getMa()));
-////                } else {
-////                    //get all
-////                    listAdapter.updateReceiptsList(db.getAllTaiSan());
-////                }
-////                if(listAdapter.getCount()<=0){
-////                    frameLayout.setVisibility(View.VISIBLE);
-////                }else frameLayout.setVisibility(View.INVISIBLE);
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, itemKinhNghiem);
+        spinnerKinhNghiem.setAdapter(adapterSpinner);
+        spinnerKinhNghiem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    //get all
+                    giangVienAdapter.updateReceiptsList(db.getAllGiangVien());
+                } else {
+                    giangVienAdapter.updateReceiptsList(db.getGiangVien10NamKinhNghiem());
+                }
+                if (giangVienAdapter.getCount() <= 0) {
+                    frameLayout.setVisibility(View.VISIBLE);
+                } else frameLayout.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
+
+    public void setDataSpinnerSinhVien() {
+        //handle tai san filter
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, itemSinhVien);
+        spinnerSinhVien.setAdapter(adapterSpinner);
+        spinnerSinhVien.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    //get all
+                    giangVienAdapter.updateReceiptsList(db.getAllGiangVien());
+                } else {
+                    giangVienAdapter.updateReceiptsList(db.getGiangVienSoSinhVienLonHon5());
+                }
+                if (giangVienAdapter.getCount() <= 0) {
+                    frameLayout.setVisibility(View.VISIBLE);
+                } else frameLayout.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -134,8 +162,8 @@ public class GiangVienFragment extends Fragment {
             listGiangVien = db.getAllGiangVien();
             giangVienAdapter.updateReceiptsList(listGiangVien);
         }
-        if(listGiangVien.isEmpty()){
+        if (listGiangVien.isEmpty()) {
             frameLayout.setVisibility(View.VISIBLE);
-        }else frameLayout.setVisibility(View.INVISIBLE);
+        } else frameLayout.setVisibility(View.INVISIBLE);
     }
 }
