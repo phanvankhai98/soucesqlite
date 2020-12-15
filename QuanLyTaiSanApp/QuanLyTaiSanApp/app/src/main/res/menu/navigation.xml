@@ -3,7 +3,7 @@
 
     <item
             android:id="@+id/page_1"
-        android:enabled="true"
+            android:enabled="true"
             android:icon="@mipmap/room"
             android:title="Phòng" />
 

@@ -54,15 +54,15 @@ public class ChiTietSinhVienActivity extends AppCompatActivity {
         boolean isExist = false;
         setSpinner(tenPhong);
         if (sinhVienID != null) {
-            int viTriSpnnerPhong = 0;
+            int viTriSpnnerGiangVien = 0;
             for (GiangVien i : listGiangVien) {
                 if (i.getId() == sinhVien.getTeacherId()) {
-                    viTriSpnnerPhong = listGiangVien.indexOf(i);
+                    viTriSpnnerGiangVien = listGiangVien.indexOf(i);
                     isExist = true;
                     break;
                 }
             }
-            spinner.setSelection(!isExist ? 0 : (viTriSpnnerPhong + 1));
+            spinner.setSelection(!isExist ? 0 : (viTriSpnnerGiangVien + 1));
         }
     }
 

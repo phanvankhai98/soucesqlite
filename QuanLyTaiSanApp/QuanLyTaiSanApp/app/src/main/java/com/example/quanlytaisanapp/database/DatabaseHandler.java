@@ -217,20 +217,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return kq > 0;
     }
 
-    public boolean updateTaiSanTrongPhong(TaiSan taiSan, int idPhong) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(TAI_SAN_ID, taiSan.getMa());
-        values.put(TAI_SAN_TEN, taiSan.getTen());
-        values.put(TAI_SAN_LOAI, taiSan.getLoai());
-        values.put(TAI_SAN_VI_TRI, idPhong);
-        values.put(TAI_SAN_GIA_TRI, taiSan.getGiaTri());
-
-        int kq = db.update(TABLE_PHONG, values, PHONG_ID + "=" + taiSan.getMa(), null);
-        db.close();
-        return kq > 0;
-    }
 
     public List<TaiSan> getListTaiSan(Cursor cursor) {
         List<TaiSan> data = new ArrayList<>();

@@ -56,23 +56,29 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
             tenPhong.add("Phòng " + i.getTen());
         }
         setSpinner(tenPhong);
+        boolean isExist = false;
         if (taiSanID != null) {
             int viTriSpnnerPhong = 0;
             for (Phong i : phongList) {
                 if (i.getMa() == taiSan.getViTri()) {
                     viTriSpnnerPhong = phongList.indexOf(i);
+                    isExist = true;
                     break;
                 }
             }
-            spinner.setSelection(viTriSpnnerPhong+1);
+            spinner.setSelection(!isExist ? 0 : (viTriSpnnerPhong + 1));
         }
     }
 
     private void init() {
         db = new DatabaseHandler(ChiTietTaiSanActivity.this);
+
+        //Nhan dl tu man truoc
         typeEdit = getIntent().getStringExtra("type_edit");
         taiSanID = getIntent().getStringExtra("tai_san_id");
         phongList = db.getAllPhong();
+
+        //gan id
         spinner = findViewById(R.id.spinner);
         edtMaTaiSan = findViewById(R.id.edt_ma_tai_san);
         edtTenTaiSan = findViewById(R.id.edt_ten_tai_san);
@@ -101,7 +107,6 @@ public class ChiTietTaiSanActivity extends AppCompatActivity {
         tenTaiSan = edtTenTaiSan.getText().toString().trim();
         loaiTaiSan = edtLoaiTaiSan.getText().toString().trim();
         giaTri = edtGiaTri.getText().toString().trim();
-
     }
 
     public void setDefaultError() {
